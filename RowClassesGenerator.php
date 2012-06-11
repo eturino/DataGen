@@ -1,10 +1,10 @@
 <?php
 
-class RowClassesGenerator {
+class EtuDev_DataGen_RowClassesGenerator {
 
-	protected $prefix = 'Data_';
+	protected $prefix = 'EtuDev_Data_';
 
-	protected $folder = './Data';
+	protected $folder = '../Data';
 
 	protected $table_prefix_changes = array();
 
@@ -14,7 +14,7 @@ class RowClassesGenerator {
 
 	/**
 	 * execute!
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function run() {
 		foreach ($this->schemas as $schema => $schema_classname) {
@@ -29,7 +29,7 @@ class RowClassesGenerator {
 	 * @param string $db_pass
 	 * @param string $db_name one of the schemas
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function setDbConfig($db_host, $db_user, $db_pass, $db_name) {
 		// de momento sólo mysql
@@ -42,7 +42,7 @@ class RowClassesGenerator {
 	/**
 	 * @param array $schemasAndClasses schema => schema_classname
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function addSchemas($schemasAndClasses) {
 		$this->schemas = $schemasAndClasses;
@@ -55,7 +55,7 @@ class RowClassesGenerator {
 	 * @param string $table_prefix
 	 * @param string $new_table_prefix
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function addTablePrefixChange($table_prefix, $new_table_prefix) {
 		$this->table_prefix_changes[$table_prefix] = $new_table_prefix;
@@ -63,11 +63,11 @@ class RowClassesGenerator {
 	}
 
 	/**
-	 * the prefix of the classes to be generated; 'Data_' by default
+	 * the prefix of the classes to be generated; 'EtuDev_Data_' by default
 	 *
 	 * @param string $prefix
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function setPrefix($prefix) {
 		$this->prefix = $prefix;
@@ -79,7 +79,7 @@ class RowClassesGenerator {
 	 *
 	 * @param string $folder
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	public function setFolder($folder) {
 		$this->folder = $folder;
@@ -90,7 +90,7 @@ class RowClassesGenerator {
 	 * @param string $schema
 	 * @param string $schema_classname
 	 *
-	 * @return RowClassesGenerator
+	 * @return EtuDev_DataGen_RowClassesGenerator
 	 */
 	protected function runSchema($schema, $schema_classname) {
 		echo ">>SCHEMA $schema \n";
