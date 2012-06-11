@@ -4,6 +4,8 @@ class EtuDev_DataGen_RowClassesGenerator {
 
 	protected $prefix = 'EtuDev_Data_';
 
+	protected $prefix_superclasses = 'EtuDev_Data_';
+
 	protected $folder = '../Data';
 
 	protected $table_prefix_changes = array();
@@ -112,10 +114,10 @@ class EtuDev_DataGen_RowClassesGenerator {
 	 */
 	protected function processTable($tableName, $schema, $schema_classname) {
 
-		$superRowClassName         = $this->prefix . 'Row';
-		$superPseudoArrayClassName = $this->prefix . 'PseudoArray';
-		$superTableWithIdClassName = $this->prefix . 'TableWithId';
-		$superTablelassName        = $this->prefix . 'Table';
+		$superRowClassName         = $this->prefix_superclasses . 'Row';
+		$superPseudoArrayClassName = $this->prefix_superclasses . 'PseudoArray';
+		$superTableWithIdClassName = $this->prefix_superclasses . 'TableWithId';
+		$superTablelassName        = $this->prefix_superclasses . 'Table';
 
 
 		$usedTableName = $this->getUsedTableName($tableName);
@@ -871,5 +873,15 @@ TEXTO;
 
 		return str_replace($search, $replace, $str);
 	}
+
+	public function setPrefixSuperclasses($prefix_superclasses) {
+		$this->prefix_superclasses = $prefix_superclasses;
+		return $this;
+	}
+
+	public function getPrefixSuperclasses() {
+		return $this->prefix_superclasses;
+	}
+
 
 }
