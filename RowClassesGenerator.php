@@ -440,7 +440,7 @@ DEFAULTS;
  *
 $rowblocks
  *
- * @method $classNameTableClass getTable()
+ * @method $classNameTableFinalClass getTable()
  */
 class $classNameRowClass extends $superRowClassName {
 
