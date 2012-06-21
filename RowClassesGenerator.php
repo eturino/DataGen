@@ -314,11 +314,10 @@ MET;
 						}
 					} else {
 						$coltype = 'int';
-						if (!$isNullable && is_null($default)) {
+						if (!$isNullable && is_null($default) && $columnInfo['COLUMN_KEY'] != 'PRI') {
 							$default = 0;
 						}
 					}
-
 
 					break;
 
@@ -329,6 +328,7 @@ MET;
 					$coltype = 'mixed';
 					break;
 			}
+
 
 			if (strlen($coltype) > $longestTypeName) {
 				$longestTypeName = strlen($coltype);
@@ -346,7 +346,7 @@ MET;
 				$comment = 'default:' . $defValue . ', ' . $comment;
 			}
 
-			if (!$isNullable) {
+			if ($isNullable) {
 				$comment = 'NOT NULL, ' . $comment;
 			}
 
