@@ -314,7 +314,7 @@ MET;
 						}
 					} else {
 						$coltype = 'int';
-						if (!$isNullable && is_null($default) && $columnInfo['COLUMN_KEY'] != 'PRI') {
+						if (!$isNullable && is_null($default) && $columnInfo['EXTRA'] != 'auto_increment') {
 							$default = 0;
 						}
 					}
