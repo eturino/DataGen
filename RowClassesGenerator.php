@@ -334,7 +334,7 @@ MET;
 				$longestTypeName = strlen($coltype);
 			}
 
-			$defValue = '';
+			$defValue = 'NULL';
 			if (!is_null($default)) {
 				if (is_bool($default)) {
 					$defValue = ($default ? 'true' : 'false');
@@ -389,12 +389,15 @@ MET;
 			} else {
 				$colblocks .= '\'nullable\' => false, ';
 
-				$defaultsblocks .= '		$def["' . $c['name'] . '"] = ';
 				$defValue = $c['default_printed'];
 
-				$defaultsblocks .= $defValue . "; \n";
 
-				$defaultsDocblockData .= '	 * @uses $' . $c['name'] . ' default value: ' . $defValue . " \n";
+				if (!is_null($c['default'])) {
+					$defaultsblocks .= '		$def["' . $c['name'] . '"] = ';
+					$defaultsblocks .= $defValue . "; \n";
+					$defaultsDocblockData .= '	 * @uses $' . $c['name'] . ' default value: ' . $defValue . " \n";
+				}
+
 			}
 
 			if (is_null($c['default'])) {
