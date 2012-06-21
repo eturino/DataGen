@@ -241,8 +241,9 @@ MET;
 
 			$comment = $columnInfo['COLUMN_COMMENT'];
 
-			$isNullable = true;
-			$default    = null;
+			$isNullable  = true;
+			$default     = null;
+			$defaultData = null;
 
 			if ($columnInfo['IS_NULLABLE'] == 'NO') {
 				$isNullable = false;
@@ -286,7 +287,21 @@ MET;
 				case 'timestamp' :
 
 					if (!$isNullable && is_null($default)) {
-						$default = '0000-00-00';
+
+						if ($colname == 'created_date' || $colname == 'updated_date') {
+							$default = 'CURRENT_TIMESTAMP';
+						} else {
+							$default = '0000-00-00';
+						}
+
+					}
+
+					if (in_array(strtoupper($default), array('NOW', 'NOW()', 'CURRENT_TIMESTAMP', 'CURRENT_TIMESTAMP()'))) {
+						$defaultData = "date('Y-m-d H:i:s')";
+					} elseif (in_array(strtoupper($default), array('CURDATE', 'CURDATE()', 'CURRENT_DATE', 'CURRENT_DATE()'))) {
+						$defaultData = "date('Y-m-d')";
+					} elseif (in_array(strtoupper($default), array('CURTIME', 'CURTIME()', 'CURRENT_TIME', 'CURRENT_TIME()'))) {
+						$defaultData = "date('H:i:s')";
 					}
 
 					$coltype = 'date';
@@ -356,7 +371,7 @@ MET;
 									   'is_nullable' => $isNullable,
 									   'default' => $default,
 									   'info' => $columnInfo,
-									   'default_printed' => $defValue);
+									   'default_printed' => $defaultData ?: $defValue);
 		}
 
 
