@@ -258,6 +258,7 @@ MET;
 
 				case 'text' :
 				case 'varchar' :
+				case 'char' :
 					$coltype = 'string';
 					if (!$isNullable && is_null($default)) {
 						$default = '';
