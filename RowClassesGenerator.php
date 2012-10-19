@@ -362,7 +362,7 @@ MET;
 				$comment = 'default:' . $defValue . ', ' . $comment;
 			}
 
-			if ($isNullable) {
+			if (!$isNullable) {
 				$comment = 'NOT NULL, ' . $comment;
 			}
 
