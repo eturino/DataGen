@@ -558,7 +558,7 @@ TEXTO;
 		}
 
 		if ($tableTraits) {
-			$tableTraits = ' use ' . implode(', ', $tableTraits);
+			$tableTraits = ' use ' . implode(', ', $tableTraits) . ';';
 		} else {
 			$tableTraits = '';
 		}
