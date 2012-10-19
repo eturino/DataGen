@@ -14,6 +14,8 @@ class EtuDev_DataGen_RowClassesGenerator {
 
 	protected $db_config = array();
 
+	protected $use_traits = false;
+
 	/**
 	 * execute!
 	 * @return EtuDev_DataGen_RowClassesGenerator
@@ -117,6 +119,7 @@ class EtuDev_DataGen_RowClassesGenerator {
 		$superRowClassName         = $this->prefix_superclasses . 'Row';
 		$superPseudoArrayClassName = $this->prefix_superclasses . 'PseudoArray';
 		$superTableWithIdClassName = $this->prefix_superclasses . 'TableWithId';
+		$superTableWithIdTraitName = $this->prefix_superclasses . 'Traits_TableWithId';
 		$superTablelassName        = $this->prefix_superclasses . 'Table';
 
 
@@ -213,6 +216,22 @@ class EtuDev_DataGen_RowClassesGenerator {
 	 */
 	public function getRowById(\$id){
 		return \$this->fetchRow(array('id = ?' => \$id));
+	}
+
+	/**
+	 * @param int \$id
+	 * @return $classNameRowFinalClass
+	 */
+	public function getById(\$id){
+		return \$this->getRowById(\$id);
+	}
+
+	public function delete(\$id) {
+		if (is_numeric(\$id)) {
+			return \$this->delete(array('id = ?' => \$id));
+		}
+
+		return parent::delete(\$id);
 	}
 
 MET;
@@ -372,7 +391,7 @@ MET;
 									   'is_nullable' => $isNullable,
 									   'default' => $default,
 									   'info' => $columnInfo,
-									   'default_printed' => $defaultData ?: $defValue);
+									   'default_printed' => $defaultData ? : $defValue);
 		}
 
 
@@ -517,10 +536,19 @@ TEXTO;
 		fclose($fh);
 
 		//Table Class
+		$methodExtra = '';
+		$docmetExtra = '';
 
 		$tableInterfaces = array();
+		$tableTraits     = array();
 		if ($hasId) {
 			$tableInterfaces[] = $superTableWithIdClassName;
+			if ($this->isUseTraits()) {
+				$tableTraits[] = $superTableWithIdTraitName;
+				$docmetExtra = " * @method $classNameRowFinalClass getRowById(\$id)" . "\n" . " * @method $classNameRowFinalClass getById(\$id)";
+			} else {
+				$methodExtra = $getbyidmethod;
+			}
 		}
 
 		if ($tableInterfaces) {
@@ -529,11 +557,12 @@ TEXTO;
 			$tableInterfaces = '';
 		}
 
-		if ($hasId) {
-			$methodExtra = $getbyidmethod;
+		if ($tableTraits) {
+			$tableTraits = ' use ' . implode(', ', $tableTraits);
 		} else {
-			$methodExtra = '';
+			$tableTraits = '';
 		}
+
 
 		$tableData = <<<TEXTO
 /**
@@ -546,8 +575,11 @@ $tableblocks
  * @method $classNameRowFinalClass createRow()
  * @method $classNameRowFinalClass fetchNew()
  * @method $classNameRowFinalClass fetchRow()
+$docmetExtra
  */
 class $classNameTableClass extends $parenTabletClass $tableInterfaces {
+
+	$tableTraits
 
 	protected \$_name = '$tableName';
 	protected \$_rowClass = '$classNameRowFinalClass';
@@ -902,5 +934,12 @@ TEXTO;
 		return $this->prefix_superclasses;
 	}
 
+	public function useTraits($bool = true) {
+		return $this->use_traits = (bool) $bool;
+	}
+
+	public function isUseTraits() {
+		return $this->use_traits;
+	}
 
 }
