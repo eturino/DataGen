@@ -277,6 +277,9 @@ MET;
 			switch ($dataType) {
 
 				case 'text' :
+				case 'tinytext' :
+				case 'mediumtext' :
+				case 'longtext' :
 				case 'varchar' :
 				case 'char' :
 					$coltype = 'string';
