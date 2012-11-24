@@ -575,6 +575,8 @@ TEXTO;
  *
 $tableblocks
  *
+ * @method static $classNameTableFinalClass getInstance()
+ *
  * @method $classNameRowFinalClass createRow()
  * @method $classNameRowFinalClass fetchNew()
  * @method $classNameRowFinalClass fetchRow()
