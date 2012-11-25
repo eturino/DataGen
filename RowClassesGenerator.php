@@ -129,14 +129,17 @@ class EtuDev_DataGen_RowClassesGenerator {
 
 		$parenTabletClass = $this->prefix . $schema_classname . '_Table';
 
+		$classNameObjClass   = $this->prefix . $schema_classname . '_Gen_Obj_' . $camelTableName;
 		$classNameRowClass   = $this->prefix . $schema_classname . '_Gen_Row_' . $camelTableName;
 		$classNamePAClass    = $this->prefix . $schema_classname . '_Gen_PA_' . $camelTableName;
 		$classNameTableClass = $this->prefix . $schema_classname . '_Gen_Table_' . $camelTableName;
 
+		$classNameObjFinalClass   = $this->prefix . $schema_classname . '_Obj_' . $camelTableName;
 		$classNameRowFinalClass   = $this->prefix . $schema_classname . '_Row_' . $camelTableName;
 		$classNamePAFinalClass    = $this->prefix . $schema_classname . '_PA_' . $camelTableName;
 		$classNameTableFinalClass = $this->prefix . $schema_classname . '_Table_' . $camelTableName;
 
+		$fileNameObjClass    = $camelTableName;
 		$fileNameRowClass    = $camelTableName;
 		$fileNamePAClass     = $camelTableName;
 		$fileNameTableClass  = $camelTableName;
@@ -169,6 +172,13 @@ class EtuDev_DataGen_RowClassesGenerator {
 			echo "se ha creado el directorio " . $rowFinalFolder . "\n";
 		}
 
+		$objFinalFolder = $this->folder . DIRECTORY_SEPARATOR . $schema_classname . '/Obj/';
+
+		if (!is_dir($objFinalFolder)) {
+			exec("mkdir " . $objFinalFolder);
+			echo "se ha creado el directorio " . $objFinalFolder . "\n";
+		}
+
 		$paFinalFolder = $this->folder . DIRECTORY_SEPARATOR . $schema_classname . '/PA/';
 
 		if (!is_dir($paFinalFolder)) {
@@ -189,6 +199,13 @@ class EtuDev_DataGen_RowClassesGenerator {
 		if (!is_dir($rowFolder)) {
 			exec("mkdir " . $rowFolder);
 			echo "se ha creado el directorio " . $rowFolder . "\n";
+		}
+
+		$objFolder = $this->folder . DIRECTORY_SEPARATOR . $schema_classname . '/Gen/Obj/';
+
+		if (!is_dir($objFolder)) {
+			exec("mkdir " . $objFolder);
+			echo "se ha creado el directorio " . $objFolder . "\n";
 		}
 
 		$paFolder = $this->folder . DIRECTORY_SEPARATOR . $schema_classname . '/Gen/PA/';
@@ -470,6 +487,34 @@ DEFAULTS;
 
 		}
 
+		//OBJ Data
+
+
+		$objData = <<<TEXTO
+/**
+ * interface Object of table $tableName
+ *
+ * @table $tableName
+ *
+$rowblocks
+ *
+ */
+interface $classNameObjClass {
+
+}
+
+TEXTO;
+
+		echo "$classNameObjClass \n";
+
+		$docFileName = $objFolder . $fileNameObjClass . '.php';
+
+		$options = 'w';
+
+		$fh = fopen($docFileName, $options) or die("can't open file");
+		fwrite($fh, "<?php \n" . $objData);
+		fclose($fh);
+
 		//ROW Data
 
 
@@ -483,7 +528,7 @@ $rowblocks
  *
  * @method $classNameTableFinalClass getTable()
  */
-class $classNameRowClass extends $superRowClassName {
+class $classNameRowClass extends $superRowClassName implements $classNameObjFinalClass {
 
 	protected \$_tableClass = '$classNameTableFinalClass';
 
@@ -517,7 +562,7 @@ TEXTO;
 $rowblocks
  *
  */
-class $classNamePAClass extends $superPseudoArrayClassName {
+class $classNamePAClass extends $superPseudoArrayClassName implements $classNameObjFinalClass {
 
 	const TABLE_NAME = '$tableName';
 	const TABLE_CLASS_NAME = '$classNameTableFinalClass';
@@ -667,6 +712,28 @@ TEXTO;
 			fclose($fh);
 		}
 
+
+		//obj
+		$docFileName = $objFinalFolder . $fileNameObjClass . '.php';
+		if (!file_exists($docFileName)) {
+			echo "$classNameObjFinalClass \n";
+			$options = 'w';
+			$fh = fopen($docFileName, $options) or die("can't open file");
+			//Table Class
+
+			$objData = <<<TEXTO
+/**
+ * interface to use and extend for Object (Row/PA) of table $tableName
+ *
+ */
+interface $classNameObjFinalClass extends $classNameObjClass {
+
+}
+
+TEXTO;
+			fwrite($fh, "<?php \n" . $objData);
+			fclose($fh);
+		}
 
 		//row
 		$docFileName = $rowFinalFolder . $fileNameRowClass . '.php';
