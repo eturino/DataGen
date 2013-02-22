@@ -405,12 +405,12 @@ MET;
 				$comment = 'NOT NULL, ' . $comment;
 			}
 
-			$columns[$colname] = array('name' => $colname,
-									   'type' => $coltype,
-									   'comment' => trim($comment),
-									   'is_nullable' => $isNullable,
-									   'default' => $default,
-									   'info' => $columnInfo,
+			$columns[$colname] = array('name'            => $colname,
+									   'type'            => $coltype,
+									   'comment'         => trim($comment),
+									   'is_nullable'     => $isNullable,
+									   'default'         => $default,
+									   'info'            => $columnInfo,
 									   'default_printed' => $defaultData ? : $defValue);
 		}
 
@@ -593,7 +593,7 @@ TEXTO;
 			$tableInterfaces[] = $superTableWithIdClassName;
 			if ($this->isUseTraits()) {
 				$tableTraits[] = $superTableWithIdTraitName;
-				$docmetExtra = " * @method $classNameRowFinalClass getRowById(\$id)" . "\n" . " * @method $classNameRowFinalClass getById(\$id)";
+				$docmetExtra   = " * @method $classNameRowFinalClass getRowById(\$id)" . "\n" . " * @method $classNameRowFinalClass getById(\$id)";
 			} else {
 				$methodExtra = $getbyidmethod;
 			}
